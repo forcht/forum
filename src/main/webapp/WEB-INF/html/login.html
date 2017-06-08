@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <script src="../../resources/js/user.js"></script>
+</head>
+<body>
+<form action="/Forum/from/login" method="post" onsubmit="return login()">
+    <label>用户名</label>
+    <input id="username" type="text" name="username" placeholder="请输入您的用户名"><br>
+    <label>密&nbsp&nbsp码</label>
+    <input id="password" type="password" name="password" placeholder="请输入您的密码"><br>
+    <input id="remember" type="checkbox" name="remember">记住我<br>
+    <button type="submit">确定</button>
+    <a href="/forum/src/main/webapp/WEB-INF/html/register.html">注册</a>
+</form>
+</body>
+</html>
