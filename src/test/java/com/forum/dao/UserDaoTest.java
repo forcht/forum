@@ -19,7 +19,7 @@ public class UserDaoTest {
 
     @Test
     public void testaddUser(){
-        User user=new User(Integer.parseInt("11"),"csscd","cc","cc","cc");
+        User user=new User("csscd","cc","cc","cc",null);
         userDao.addUser(user);
     }
     @Test
@@ -34,7 +34,7 @@ public class UserDaoTest {
     }
     @Test
     public void testUpdateUserInfo(){
-        User user=new User(Integer.parseInt("1"),"aaa","cca","cc","cc");
+        User user=new User("csscd","cc","cc","cc",null);
         System.out.println(userDao.updateUserInfo(user.getUserId(),user.getUsername(),user.getPassword()));
     }
 }
