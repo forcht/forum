@@ -37,11 +37,32 @@ public interface UserDao {
     User findUserByEmail(@Param("email") String email);
 
     /**
-     *
-     * @param userId
-     * @param username
-     * @param password
+     * 通过用户的激活码查找用户
+     * @param code
      * @return
      */
-    int updateUserInfo(@Param("userId") Integer userId,@Param("username") String username,@Param("password") String password);
+    User findUserByCode(@Param("code") String code);
+
+    /**
+     * 更新用户的激活码和状态
+     * @param code
+     * @param state
+     * @return
+     */
+    int updateUserCodeAndState(@Param("userId") Integer userId,@Param("code") String code,@Param("state") int state);
+    /**
+     * 更新用户的
+     * @param userId
+     * @param username
+     * @return
+     */
+    int updateUserUsername(@Param("userId") Integer userId,@Param("username") String username);
+
+    /**
+     * 更新用户的头像
+     * @param userId
+     * @param heading
+     * @return
+     */
+    int updateUserHeading(@Param("userId") Integer userId,@Param("heading") String heading);
 }

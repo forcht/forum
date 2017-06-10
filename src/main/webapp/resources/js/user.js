@@ -29,7 +29,7 @@ function register() {
     var email=document.getElementById("email");
     var username=document.getElementById("username");
     var password=document.getElementById("password");
-    var password1=document.getElementById("password1");
+    var repassword=document.getElementById("repassword");
     if(email.value==""){
         alert("请输入邮箱");
         return false;
@@ -40,15 +40,28 @@ function register() {
     }else if (password.value==""){
         alert("请输入密码");
         return false;
-    } else if(password1.value=="") {
+    } else if(repassword.value=="") {
         alert("请再次输入密码");
         return false;
-    }else if (password.value!=password1.value){
+    }else if (password.value!=repassword.value){
         alert("两个输入的密码不一样");
         return false;
     } else{
-        alert(email.value+username.value+password.value+password1.value);
+        alert(email.value+username.value+password.value+repassword.value);
         return true;
     }
     return false;
+}
+
+/**
+ * 修改用户信息
+ * @returns {boolean}
+ */
+function updateUserInfo() {
+    var username=document.getElementById("username");
+    if(username.value==""){
+        alert("请输入用户名");
+        return false;
+    }
+    return true;
 }

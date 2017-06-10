@@ -39,20 +39,9 @@ public class UserController {
     public ModelAndView Register(@RequestParam("username") String username,
                                  @RequestParam("email") String email,
                                  @RequestParam("password") String password){
-        ModelAndView model=new ModelAndView();
-        int flag=userService.Register(username,email,password);
-        if(flag==-1){
-            model.addObject("data","该邮箱已注册");
-        }else if(flag==-2){
-            model.addObject("data","该昵称已被使用");
-        }
-        if(flag>0){
-            model.addObject("data","注册成功，请登录");
-        }else if(flag==0){
-            model.addObject("data","注册失败");
-        }
-        model.setViewName("register");
-        return model;
+        ModelAndView modelAndView=userService.Register(username,email,password);
+        modelAndView.setViewName("register");
+        return modelAndView;
     }
 
     /**
@@ -65,68 +54,41 @@ public class UserController {
     @ResponseBody
     public ModelAndView login(@RequestParam("username") String username,
                               @RequestParam("password") String password,
-                              HttpSession session){
-        ModelAndView model=new ModelAndView();
-        model.setViewName("index");
-        int flag=userService.checkLogin(username,password);
-        if(flag==-1){
-            model.addObject("data","该用户名不存在");
-        }else if(flag==-2){
-            model.addObject("data","输入的密码错误");
-        }else{
-            session.setAttribute("user",userService.findUserByName(username));
-            model.setViewName("index");
-        }
-        return model;
+                               HttpServletRequest request){
+        ModelAndView modelAndView=userService.checkLogin(username,password,request);
+        return modelAndView;
     }
 
     /**
-     * 修改用户名和密码
-     * @param username
-     * @param password
-     * @param session
+     * 修改用户信息，修改头像和昵称
+     * @param request
+     * @param file
      * @return
      */
-    @RequestMapping(value = "/from/update",method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView updateUserInfo(@RequestParam("username") String username,
-                                       @RequestParam("password") String password,
-                                       HttpSession session){
-        User user= (User) session.getAttribute("user");
-        ModelAndView model=new ModelAndView();
-        model.setViewName("login");
-        int flag=userService.updateUserInfo(user.getUserId(),username,password);
-        if(flag==-1){
-            model.addObject("data","该昵称已被使用");
-        }else if(flag==0){
-            model.addObject("data","修改失败");
-        }else {
-            user.setUsername(username);
-            user.setPassword(password);
+    @RequestMapping(value = "/from/updateUserInfo",method = RequestMethod.POST)
+    public ModelAndView updateUserHeadingAndUsername(HttpServletRequest request,
+                                @RequestParam(value = "file",required = false) MultipartFile file,
+                                @RequestParam("username") String username){
+       ModelAndView modelAndView=userService.updateUserHeadingAndUsername(request,file,username);
+       modelAndView.setViewName("updateUserInfo");
+        return modelAndView;
+    }
+
+    /**
+     * 激活用户
+     * @param code
+     * @return
+     */
+    @RequestMapping(value = "/activateUser")
+    public ModelAndView activateUser(@RequestParam(value = "code",required = false) String code,HttpServletRequest request){
+        ModelAndView modelAndView=userService.activateUser(code);
+        User user= (User) modelAndView.getModel().get("user");
+        if(user!=null){
+            HttpSession session=request.getSession();
             session.setAttribute("user",user);
         }
-        return model;
-    }
-    @RequestMapping(value = "/from/updateHeading",method = RequestMethod.POST)
-    public String updateHeading(HttpServletRequest request,@RequestParam("file") MultipartFile file){
-
-        // 文件名及文件存储位置,保存到 ../resources/upload/ 目录下
-        String fileName = UUID.randomUUID().toString()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
-        String filePath = request.getServletContext().getRealPath("/resources/upload");
-        //文件上传到服务器
-        try {
-            file.transferTo(new File(filePath+File.separator+fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //修改数据库中用户的头像
-        String heading="/resources/upload/"+fileName;
-       // HttpSession session=request.getSession();
-       // User user= (User) session.getAttribute("user");
-        //userService.updateUserHeading(user.getUserId(),heading);
-       // user.setHeading(heading);
-       // session.setAttribute("user",user);
-        return "index";
+        modelAndView.setViewName("main");
+        return modelAndView;
     }
     @RequestMapping(value = "/")
     public String test(){

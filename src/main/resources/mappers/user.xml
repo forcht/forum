@@ -5,20 +5,35 @@
 <mapper namespace="com.forum.dao.UserDao">
     <!--添加用户-->
     <insert id="addUser" parameterType="User">
-      insert into user(username,password,email,heading)
-          values(#{user.username},#{user.password},#{user.email},#{user.heading})
+      insert into user(username,password,email,heading,code)
+          values(#{user.username},#{user.password},#{user.email},#{user.heading},#{user.code})
     </insert>
     <!--通过用户ID查找用户-->
     <select id="findUserById" resultType="User">
         select * from user where user_id=#{userId}
     </select>
+    <!--用户用户名查找用户-->
     <select id="findUserByName" resultType="User">
         select *from user where username=#{username}
     </select>
+    <!--通过用户邮箱查找用户-->
     <select id="findUserByEmail" resultType="User">
         select *from user where email=#{email}
     </select>
-    <update id="updateUserInfo">
-        update user set username=#{username} , password=#{password} where user_id=#{userId}
+    <!--通过用户的激活码查找用户-->
+    <select id="findUserByCode" resultType="User">
+         select *from user where code=#{code}
+    </select>
+    <!--更新用户的激活码和状态-->
+    <update id="updateUserCodeAndState">
+        update user set code=#{code} , state=#{state} where user_id=#{userId}
+    </update>
+    <!--更新用户的用户名-->
+    <update id="updateUserUsername">
+         update user set username=#{username} where user_id=#{userId}
+    </update>
+    <!--更新用户的头像-->
+    <update id="updateUserHeading">
+         update user set heading=#{heading} where user_id=#{userId}
     </update>
 </mapper>

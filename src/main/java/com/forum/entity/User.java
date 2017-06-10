@@ -23,17 +23,36 @@ public class User {
      */
     private String email;
     /**
-
      * 用户的头像
      */
     private String heading;
+    /**
+     * 用户的激活码
+     */
+    private String code;
+    /**
+     * 用户的状态，0为还没激活，1为已激活
+     */
+    private int state;
 
-    public User(Integer userId, String username, String password, String email, String heading) {
+    public User(Integer userId, String username, String password, String email, String heading, String code, int state) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
         this.heading = heading;
+        this.code = code;
+        this.state = state;
+    }
+    public User(){
+
+    }
+    public User(String username, String password, String email, String heading,String code) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.heading = heading;
+        this.code=code;
     }
     public Integer getUserId() {
         return userId;
@@ -73,6 +92,22 @@ public class User {
 
     public void setHeading(String heading) {
         this.heading = heading;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     @Override

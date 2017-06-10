@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,19 +14,49 @@
     <title>register</title>
     <script src="${pageContext.request.contextPath}/resources/js/user.js"></script>
 </head>
-<body>
-<form action="/Forum/from/register" method="post" onsubmit="return register()">
-    <label>邮箱</label>
-    <input id="email" type="email" name="email" placeholder="请输入您的邮箱" ><br>
-    <label>用户名</label>
-    <input id="username" type="text" name="username" placeholder="请输入您的用户名"><br>
-    <label>密&nbsp&nbsp码</label>
-    <input id="password" type="password" name="password" placeholder="请输入您的密码"><br>
-    <label>确定密码</label>
-    <input id="password1" type="password" name="password1" placeholder="请再次输入您的密码"><br>
-    <input type="submit" value="确定">
-    <input type="reset" value="重设">
-    <a href="/Forum/to/login">登录</a>
+<br>
+<form action="/Forum/from/register" method="post" onsubmit="return register();">
+    <table border="1" align="center" width="25%">
+        <caption>用户注册</caption>
+        <tr>
+            <td>邮箱</td>
+            <td>
+                <input type="email" name="email" id="email">
+            </td>
+        </tr>
+        <tr>
+            <td>用户名</td>
+            <td>
+                <input type="text" name="username" id="username">
+            </td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td>
+                <input type="password" name="password" id="password">
+            </td>
+        </tr>
+        <tr>
+            <td>确认密码</td>
+            <td><input type="password" name="repassword" id="repassword">
+            </td>
+        </tr>
+        <c:set var="data" scope="page" value="${data}"/>
+        <c:if test="${ not empty data}">
+           <tr>
+               <td>
+                   <label id="tip" style="color: #f81c2e">${data}</label>
+               </td>
+           </tr>
+        </c:if>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="注册">&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="reset" value="重设">&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="/Forum/to/login">登录</a>
+            </td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>
