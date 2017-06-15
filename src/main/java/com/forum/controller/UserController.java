@@ -1,6 +1,8 @@
 package com.forum.controller;
 
+import com.forum.entity.Article;
 import com.forum.entity.User;
+import com.forum.service.ArticleService;
 import com.forum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
+import java.util.List;
 
 
 /**
@@ -27,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ArticleService articleService;
     /**
      * 用户注册
      * @param username
@@ -55,7 +57,12 @@ public class UserController {
     public ModelAndView login(@RequestParam("username") String username,
                               @RequestParam("password") String password,
                                HttpServletRequest request){
-        ModelAndView modelAndView=userService.checkLogin(username,password,request);
+        ModelAndView modelAndView=new ModelAndView();
+        int flag=userService.checkLogin(username,password,request,modelAndView);
+        if(flag==1){
+            List<Article> list=articleService.getAllArticle();
+            modelAndView.addObject("list",list);
+        }
         return modelAndView;
     }
 

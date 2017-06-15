@@ -35,6 +35,21 @@ public class Article {
      * 文章的状态，置顶1，加精2，置顶加精3
      */
     private Integer status;
+    /**
+     * 文章的作者
+     */
+    private User user;
+
+    public Article(){
+
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getArticleId() {
         return articleId;
