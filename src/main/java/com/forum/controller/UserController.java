@@ -1,8 +1,6 @@
 package com.forum.controller;
 
-import com.forum.entity.Article;
 import com.forum.entity.User;
-import com.forum.service.ArticleService;
 import com.forum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,23 +10,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.util.Map;
 
 
 /**
  * Created by haitang on 2017/6/5
  */
 @Controller
+@RequestMapping("user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ArticleService articleService;
     /**
      * 用户注册
      * @param username
@@ -36,14 +32,13 @@ public class UserController {
      * @param password
      * @return
      */
-    @RequestMapping(value = "/from/register",method = RequestMethod.POST)
+    @RequestMapping(value = "/register",method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView Register(@RequestParam("username") String username,
+    public Map<String,String> Register(@RequestParam("username") String username,
                                  @RequestParam("email") String email,
                                  @RequestParam("password") String password){
-        ModelAndView modelAndView=userService.Register(username,email,password);
-        modelAndView.setViewName("register");
-        return modelAndView;
+        Map<String,String> map=userService.Register(username,email,password);
+        return map;
     }
 
     /**
@@ -52,18 +47,13 @@ public class UserController {
      * @param password
      * @return
      */
-    @RequestMapping(value = "/from/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView login(@RequestParam("username") String username,
-                              @RequestParam("password") String password,
-                               HttpServletRequest request){
-        ModelAndView modelAndView=new ModelAndView();
-        int flag=userService.checkLogin(username,password,request,modelAndView);
-        if(flag==1){
-            List<Article> list=articleService.getAllArticle();
-            modelAndView.addObject("list",list);
-        }
-        return modelAndView;
+    public Map<String,String> login(@RequestParam("username") String username,
+                                    @RequestParam("password") String password,
+                                    HttpSession session){
+        Map<String,String> map=userService.Login(username,password,session);
+        return map;
     }
 
     /**
@@ -97,26 +87,15 @@ public class UserController {
         modelAndView.setViewName("main");
         return modelAndView;
     }
-    @RequestMapping(value = "/")
-    public String test(){
-        return "login";
-    }
 
     /**
-     * 转发到登录页面
+     * 用户退出
+     * @param session
      * @return
      */
-    @RequestMapping(value = "/to/login",method = RequestMethod.GET)
-    public String toLogin(){
-        return "login";
-    }
-
-    /**
-     * 转发到注册页面
-     * @return
-     */
-    @RequestMapping(value ="/to/register",method = RequestMethod.GET)
-    public  String toRegister(){
-        return "register";
+    @RequestMapping(value = "/exit")
+    public String exit(HttpSession session){
+        session.invalidate();
+        return "redirect:/index.jsp";
     }
 }

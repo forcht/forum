@@ -2,55 +2,61 @@
  * Created by haitang on 2017/6/8.
  */
 /**
- * 处理登录的表单
- * @returns {boolean}
+ * 处理登录
  */
 function login() {
     var username=document.getElementById("username");
     var password=document.getElementById("password");
-    var remember=document.getElementById("remember");
+    //var remember=document.getElementById("remember");
     if(username.value==""){
         alert("请输入用户名");
-        return false;
     }else if (password.value==""){
         alert("请输入密码");
-        return false;
     } else {
-        alert(username.value+password.value+remember.checked);
-        return true;
+        var url = "user/login";
+        var params = {
+            username : $('#username').val(),
+            password : $('#password').val()
+            //remember : $('#remember').val()
+        };
+        $.post(url, params, function(data) {
+            alert(data.data);
+            location.href = "article/list/1";
+        }, "json");
     }
-    return false;
+
 }
 /**
- * 处理注册的表单
- * @returns {boolean}
+ * 处理注册
  */
 function register() {
     var email=document.getElementById("email");
     var username=document.getElementById("username");
     var password=document.getElementById("password");
-    var repassword=document.getElementById("repassword");
+    var password2=document.getElementById("password2");
     if(email.value==""){
         alert("请输入邮箱");
-        return false;
     }
     else if(username.value==""){
         alert("请输入用户名");
-        return false;
     }else if (password.value==""){
         alert("请输入密码");
-        return false;
-    } else if(repassword.value=="") {
+    } else if(password2.value=="") {
         alert("请再次输入密码");
         return false;
-    }else if (password.value!=repassword.value){
+    }else if (password.value!=password2.value){
         alert("两个输入的密码不一样");
-        return false;
     } else{
-        alert(email.value+username.value+password.value+repassword.value);
-        return true;
+        var url = "user/register";
+        var params = {
+            email   :  $('#email').val(),
+            username : $('#username').val(),
+            password : $('#password').val()
+        };
+        $.post(url, params, function(data) {
+            alert(data.data);
+        }, "json");
     }
-    return false;
 }
 
 /**

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forum.dao.FloorDao">
+
+    <resultMap id="FloorTypeMap" type="Floor">
+        <id property="floorId" column="floor_id"/>
+        <result property="commentId" column="comment_id"/>
+        <result property="content" column="content"/>
+        <result property="date" column="date"/>
+        <association property="user" column="user_id" select="com.forum.dao.UserDao.findUserById"/>
+    </resultMap>
+    <!--根据查找评论的所有楼中楼评论-->
+    <select id="getFloorByCommentId" resultMap="FloorTypeMap">
+       select *from floor where comment_id=#{commentId}
+    </select>
+</mapper>

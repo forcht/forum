@@ -43,6 +43,16 @@ public class Article {
     public Article(){
 
     }
+
+    public Article(String title, String content, Date date, Integer userId, String lable, Integer status) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.userId = userId;
+        this.lable = lable;
+        this.status = status;
+    }
+
     public User getUser() {
         return user;
     }

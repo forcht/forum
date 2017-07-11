@@ -16,9 +16,23 @@ public interface ArticleDao {
     List<Article> findAllArticle();
 
     /**
+     * 分页查找文章
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    List<Article> getArticlePageList(@Param("currentPage") int currentPage, @Param("pageSize") int pageSize);
+    /**
      * 添加文章
      * @param article
      * @return
      */
     int addArticle(@Param("article") Article article);
+
+    /**
+     * 根据帖子Id获取帖子的数据
+     * @param articleId
+     * @return
+     */
+    Article getArticleById(@Param("articleId") Integer articleId);
 }

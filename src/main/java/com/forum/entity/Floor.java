@@ -28,6 +28,19 @@ public class Floor {
      */
     private Date date;
 
+    private User user;
+
+    public Floor(){
+
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Integer getFloorId() {
         return floorId;
     }

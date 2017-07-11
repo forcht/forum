@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -34,19 +36,19 @@ public class UserService {
      * @return
      */
     @Transactional
-    public ModelAndView Register(String username,String email,String password) {
+    public Map<String,String> Register(String username,String email,String password) {
         User user=userDao.findUserByEmail(email);
-        ModelAndView modelAndView=new ModelAndView();
+        Map<String,String> map=new HashMap<>();
         //该邮箱已被注册
         if(user!=null){
-            modelAndView.addObject("data","该邮箱已注册");
-            return modelAndView;
+            map.put("data","该邮箱已注册");
+            return map;
         }
         //该用户名已被使用
         user=userDao.findUserByName(username);
         if(user!=null){
-            modelAndView.addObject("data","该用户名已被使用");
-            return modelAndView;
+            map.put("data","该用户名已被使用");
+            return map;
         }
         //默认的用户头像
         String heading="/resources/imgs/default.jpg";
@@ -55,41 +57,38 @@ public class UserService {
         user=new User(username, StringUtils.MD5(password),email,heading,code);
         int flag=userDao.addUser(user);
         if (flag==0){
-            modelAndView.addObject("data","注册失败");
-            return modelAndView;
+            map.put("data","注册失败");
+            return map;
         }
+        //发送验证邮件
         EmailUtils.sendEmail(email,code);
-        modelAndView.addObject("data","注册成功，请登录您的邮箱激活账户");
-        return modelAndView;
+        map.put("data","注册成功，请登录您的邮箱激活账户");
+        return map;
     }
 
     /**
      * 用户登录
      * @param username
      * @param password
-     * @param request
-     * @param modelAndView
+     * @param session
      * @return
      */
-    public int checkLogin(String username, String password, HttpServletRequest request,ModelAndView modelAndView) {
+    public Map<String,String> Login(String username, String password, HttpSession session) {
        User user=userDao.findUserByName(username);
+       Map<String,String> map=new HashMap<>();
        //如果该昵称不存在
        if(user==null){
-           modelAndView.addObject("data","该用户名不存在");
-           modelAndView.setViewName("login");
-           return 0;
+           map.put("data","用户不存在");
+           return map;
        }
        //如果输入的密码错误
        if(!user.getPassword().equals(StringUtils.MD5(password))){
-           modelAndView.addObject("data","输入的密码错误");
-           modelAndView.setViewName("login");
-           return 0;
+           map.put("data","输入密码错误");
+           return map;
        }
-       HttpSession session=request.getSession();
        session.setAttribute("user",userDao.findUserByName(username));
-       modelAndView.addObject("data","登录成功");
-       modelAndView.setViewName("main");
-        return 1;
+       map.put("data","登录成功");
+        return map;
     }
 
     @Transactional

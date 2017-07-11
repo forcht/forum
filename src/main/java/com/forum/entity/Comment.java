@@ -1,6 +1,7 @@
 package com.forum.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by haitang on 2017/6/4.
@@ -27,6 +28,41 @@ public class Comment {
      * 评论发表的时间
      */
     private Date date;
+    /**
+     * 评论的作者
+     */
+    private User user;
+    /**
+     * 楼中楼评论
+     */
+    List<Floor> floors;
+
+    public Comment() {
+    }
+
+    public Comment(String content, Integer articleId, Integer userId, Date date) {
+        this.content = content;
+        this.articleId = articleId;
+        this.userId = userId;
+        this.date = date;
+    }
+
+    public List<Floor> getFloors() {
+        return floors;
+    }
+
+    public void setFloors(List<Floor> floors) {
+        this.floors = floors;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Integer getCommentId() {
         return commentId;
     }

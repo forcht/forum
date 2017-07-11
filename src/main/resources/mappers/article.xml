@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forum.dao.ArticleDao">
+
+    <resultMap id="ArticleTypeMap" type="Article">
+        <id property="articleId" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="date" column="date"/>
+        <result property="lable" column="lable"/>
+        <result property="status" column="status"/>
+        <association property="user" column="user_id" select="com.forum.dao.UserDao.findUserById"/>
+    </resultMap>
+    <!--添加文章-->
+ <insert id="addArticle" parameterType="Article">
+      insert into article(title,content,date,user_id,lable,status) values
+      (#{article.title},#{article.content},#{article.date},#{article.userId},#{article.lable},#{article.status});
+ </insert>
+    <!--查找所有的文章-->
+    <select id="findAllArticle" resultMap="ArticleTypeMap">
+        SELECT * FROM article
+    </select>
+    <!--分页查找文章-->
+    <select id="getArticlePageList" resultMap="ArticleTypeMap">
+        SELECT *FROM Article ORDER BY article_id DESC limit #{currentPage},#{pageSize}
+    </select>
+    <!--根据帖子Id获取帖子数据-->
+    <select id="getArticleById" resultMap="ArticleTypeMap">
+        select *from article where article_id=#{articleId}
+    </select>
+</mapper>
